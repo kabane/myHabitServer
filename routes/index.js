@@ -1,9 +1,8 @@
-var express = require('express');
-var router = express.Router();
-
-var mongoose = require('mongoose');
+var express = require('express'),
+    router = express.Router(),
+    mongoose = require('mongoose'),
+    Todo = require( '../models/todo')
 mongoose.connect('mongodb://localhost:27017/myHabit', {useNewUrlParser: true})
-var Todo = require( '../models/todo')
 
 router.get( ['/', '/todo'], function ( req, res ) {
   Todo.find({}, function(err, todo) {
@@ -12,8 +11,8 @@ router.get( ['/', '/todo'], function ( req, res ) {
     } else {
       res.send(todo);
     }
-  });
-});
+  })
+})
 
 router.get( '/todo/:id', function ( req, res ) {
   Todo.findOne({_id: req.params.id}, function(err, todo){
@@ -21,14 +20,13 @@ router.get( '/todo/:id', function ( req, res ) {
       res.send(err)
     }
     res.json(todo)
-  });
-});
+  })
+})
 
 router.post( '/todo', function ( req, res ) {
   var data = req.body;
-  var todo = new model.Todo({
-    _id: req.body._id,
-    name: req.body.name
+  var todo = new Todo({
+    text: data.text
   })
 
   todo.save(function(err){
@@ -37,6 +35,15 @@ router.post( '/todo', function ( req, res ) {
     }
     res.json({message: "create " + todo.text})
   })
-} );
+} )
+
+router.delete('/todo/:id', function( req, res ) {
+  Todo.remove({_id: req.params.id}, function(err, results){
+    if (err) {
+      res.send(err)
+    }
+    res.json({message: "Success deleted"})
+  })
+})
 
 module.exports = router;
