@@ -9,6 +9,9 @@ router.get( ['/', '/todo'], function ( req, res ) {
     if (err) {
       throw err;
     } else {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
       res.send(todo);
     }
   })
@@ -36,6 +39,22 @@ router.post( '/todo', function ( req, res ) {
     res.json({message: "create " + todo.text})
   })
 } )
+
+router.patch('/todo/:id', function( req, res ) {
+  Todo.findOne({_id: req.params.id}, function(err, todo){
+    if (err) {
+      res.send(err)
+    }
+    todo.text = req.body.text
+    todo.save(function(err) {
+      if (err) {
+        res.send(err)
+      }
+
+      res.json({message: "Success updated"})
+    })
+  })
+})
 
 router.delete('/todo/:id', function( req, res ) {
   Todo.remove({_id: req.params.id}, function(err, results){
