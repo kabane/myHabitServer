@@ -1,19 +1,20 @@
 var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
-    Todo = require( '../models/todo')
+    Todo = require( '../models/todo'),
+    querystring = require('querystring')
+
 mongoose.connect('mongodb://localhost:27017/myHabit', {useNewUrlParser: true})
 
 router.get( ['/', '/todo'], function ( req, res ) {
   Todo.find({}, function(err, todo) {
     if (err) {
       throw err;
-    } else {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-      res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-      res.send(todo);
     }
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
+    res.send(todo)
   })
 })
 
@@ -27,16 +28,22 @@ router.get( '/todo/:id', function ( req, res ) {
 })
 
 router.post( '/todo', function ( req, res ) {
-  var data = req.body;
+  var data = req.body
+console.log(data)
   var todo = new Todo({
-    text: data.text
+    name: data.name,
+    status: 0
   })
-
-  todo.save(function(err){
+console.log(todo)
+  todo.save(function(err, todo){
     if (err) {
       res.send(err)
-    }
-    res.json({message: "create " + todo.text})
+    } 
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
+    res.json({message: "create " + todo.name})
+
   })
 } )
 
@@ -45,13 +52,15 @@ router.patch('/todo/:id', function( req, res ) {
     if (err) {
       res.send(err)
     }
-    todo.text = req.body.text
+    todo.name = req.body.name
+    todo.status = req.body.status
     todo.save(function(err) {
       if (err) {
         res.send(err)
       }
 
       res.json({message: "Success updated"})
+      
     })
   })
 })
