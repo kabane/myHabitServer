@@ -31,7 +31,8 @@ npm run script
 
 or
 
-DEBUG=express:* node ./bin/www // デバックモード
+// デバックモード
+DEBUG=express:* node ./bin/www
 ```
 
 - 動作チェック
