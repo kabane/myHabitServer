@@ -25,6 +25,15 @@ npm install
 node scripts/seeds.js
 ```
 
+- サーバー立ち上げ
+```
+npm run script
+
+or
+
+DEBUG=express:* node ./bin/www // デバックモード
+```
+
 - 動作チェック
 ```
 curl http://localhost:3000
