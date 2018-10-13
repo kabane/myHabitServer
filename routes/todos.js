@@ -6,7 +6,7 @@ var express = require('express'),
 
 mongoose.connect('mongodb://localhost:27017/myHabit', {useNewUrlParser: true})
 
-router.get( ['/', '/todo'], function ( req, res ) {
+router.get( ['/', '/todos'], function ( req, res ) {
   Todo.find({}, function(err, todo) {
     if (err) {
       throw err;
@@ -18,7 +18,7 @@ router.get( ['/', '/todo'], function ( req, res ) {
   })
 })
 
-router.get( '/todo/:id', function ( req, res ) {
+router.get( '/todos/:id', function ( req, res ) {
   Todo.findOne({_id: req.params.id}, function(err, todo){
     if (err) {
       res.send(err)
@@ -27,14 +27,13 @@ router.get( '/todo/:id', function ( req, res ) {
   })
 })
 
-router.post( '/todo', function ( req, res ) {
+router.post( '/todos', function ( req, res ) {
   var data = req.body
-console.log(data)
   var todo = new Todo({
     name: data.name,
     status: 0
   })
-console.log(todo)
+
   todo.save(function(err, todo){
     if (err) {
       res.send(err)
@@ -47,7 +46,7 @@ console.log(todo)
   })
 } )
 
-router.patch('/todo/:id', function( req, res ) {
+router.patch('/todos/:id', function( req, res ) {
   Todo.findOne({_id: req.params.id}, function(err, todo){
     if (err) {
       res.send(err)
@@ -65,7 +64,7 @@ router.patch('/todo/:id', function( req, res ) {
   })
 })
 
-router.delete('/todo/:id', function( req, res ) {
+router.delete('/todos/:id', function( req, res ) {
   Todo.remove({_id: req.params.id}, function(err, results){
     if (err) {
       res.send(err)
