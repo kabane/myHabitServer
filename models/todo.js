@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var TodoSchema = new Schema({
     name: String,
-    status: Number
+    status: Number,
+    categories: [{type: Schema.Types.ObjectId, ref: 'Category'}]
 });
 
 module.exports = mongoose.model('Todo', TodoSchema);
