@@ -27,9 +27,9 @@ Category.deleteMany({})
         return Category.find({}, function(e, category){
             console.log('create Todo')
             return Todo.insertMany([
-                {name: 'todo1', status: 0, category: category[0]},
-                {name: 'todo2', status: 0, category: category[1]},
-                {name: 'todo3', status: 0, category: category[2]}
+                {name: 'todo1', status: 0, category_id: category[0]},
+                {name: 'todo2', status: 0, category_id: category[1]},
+                {name: 'todo3', status: 0, category_id: category[2]}
             ])
         })
     }
