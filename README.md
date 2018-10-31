@@ -40,8 +40,30 @@ DEBUG=express:* node ./bin/www
 curl http://localhost:3000
 ```
 
-以下のJSONが返却されれば準備完了
+以下のようなJSONが返却されれば準備完了
 
 ```
-[{"_id":"5bbb9005ebfa28644e7d6a96","name":"todo4","status":0,"__v":0},{"_id":"5bbb9005ebfa28644e7d6a95","name":"todo3","status":0,"__v":0},{"_id":"5bbb9005ebfa28644e7d6a97","name":"todo5","status":1,"__v":0},{"_id":"5bbb9005ebfa28644e7d6a98","name":"todo6","status":1,"__v":0},{"_id":"5bbb9005ebfa28644e7d6a99","name":"todo7","status":1,"__v":0},{"_id":"5bbb9005ebfa28644e7d6a9a","name":"todo8","status":1,"__v":0}]
+[
+    {
+        "_id": "5bd854ed8381264ab2c5de67",
+        "name": "todo1",
+        "status": 0,
+        "category_id": "5bd854ed8381264ab2c5de64",
+        "__v": 0
+    },
+    {
+        "_id": "5bd854ed8381264ab2c5de68",
+        "name": "todo2",
+        "status": 0,
+        "category_id": "5bd854ed8381264ab2c5de65",
+        "__v": 0
+    },
+    {
+        "_id": "5bd854ed8381264ab2c5de69",
+        "name": "todo3",
+        "status": 0,
+        "category_id": "5bd854ed8381264ab2c5de66",
+        "__v": 0
+    }
+]
 ```
