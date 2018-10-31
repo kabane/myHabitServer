@@ -2,7 +2,6 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
     Todo = require( '../models/todo'),
-    Category = require( '../models/category'),
     querystring = require('querystring');
 
 mongoose.connect('mongodb://localhost:27017/myHabit', {useNewUrlParser: true})
@@ -33,6 +32,7 @@ router.post( '/todos', function ( req, res ) {
   var todo = new Todo({
     name: data.name,
     status: 0,
+    elapsed_time: 0,
     category_id: data.category_id
   });
 
@@ -59,6 +59,7 @@ router.patch('/todos/:id', function( req, res ) {
     }
     todo.name = req.body.name
     todo.status = req.body.status
+    todo.elapsed_time = req.body.elapsed_time
     todo.category_id = req.body.category_id
     todo.save(function(err) {
       if (err) {
