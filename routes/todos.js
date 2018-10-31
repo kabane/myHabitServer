@@ -33,21 +33,22 @@ router.post( '/todos', function ( req, res ) {
   var todo = new Todo({
     name: data.name,
     status: 0,
+    category_id: data.category_id
   });
 
   var categoryId = new mongoose.Types.ObjectId(data.categoryId)
-  var category = Category.findOne({_id: categoryId}, function(err, category) {
-    todo.categories.push(category)
-    todo.save(function(err, todo){
-      if (err) {
-        res.send(err)
-      } 
+
+  todo.save(function(err, todo){
+    if (err) {
+      res.header('Access-Control-Allow-Origin', '*')
+      res.send(err)
+    } else {
       res.header('Access-Control-Allow-Origin', '*')
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
       res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
       res.json({message: "create " + todo.name})
-    })
-  });
+    }
+  })
   
 } )
 
@@ -58,6 +59,7 @@ router.patch('/todos/:id', function( req, res ) {
     }
     todo.name = req.body.name
     todo.status = req.body.status
+    todo.category_id = req.body.category_id
     todo.save(function(err) {
       if (err) {
         res.send(err)
