@@ -14,10 +14,15 @@ brew install mongodb
 ```
 
 ## 開発準備
+本リポジトリのルートディレクトリに移動後、以下を実行。
 
 - npmインストール
 ```
 npm install
+```
+- データベースの起動
+```
+mongod
 ```
 
 - 初期データ作成
@@ -27,7 +32,7 @@ node scripts/seeds.js
 
 - サーバー立ち上げ
 ```
-npm run script
+npm run start
 
 or
 
