@@ -60,26 +60,23 @@ router.post('/todos/:id', function( req, res, next ) {
     res.json(400, {message: 'params is undefined'})
     return next()
   }
-  try {
-    Todo.findOne({_id: req.params.id}).exec()
-    .then(function(err, todo){
-      if (err) { return next(err) }
-      if(!todo) {
-        res.json(404, {message: 'todo is not found'})
-        return next()
-      }
-      todo.name = req.body.name || todo.name
-      todo.status = req.body.status || todo.status
-      todo.elapsed_time = req.body.elapsed_time || todo.elapsed_time
-      todo.category_id = req.body.category_id || todo.category_id
-      todo.save(function(err) {
-        if (err) { next(err) }
-        res.json({message: "Success updated"})
-      })
+  Todo.findOne({_id: req.body._id}).exec()
+  .then(function(todo){
+    if(!todo) {
+      res.json(404, {message: 'todo is not found'})
+      return next()
+    }
+    todo.name = req.body.name || todo.name
+    todo.status = req.body.status || todo.status
+    todo.elapsed_time = req.body.elapsed_time || todo.elapsed_time
+    todo.category_id = req.body.category_id || todo.category_id
+    todo.save(function(err) {
+      if (err) { next(err) }
+      res.json({message: "Success updated"})
     })
-  } catch(err) {
-    next(err)
-  }
+  }).catch(function(err){
+    return next(err)
+  })
 })
 
 router.delete('/todos/:id', function( req, res ) {
