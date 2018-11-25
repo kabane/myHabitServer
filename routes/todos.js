@@ -9,7 +9,7 @@ mongoose.connect('mongodb://localhost:27017/myHabit', {useNewUrlParser: true})
 router.get( ['/', '/todos'], function ( req, res ) {
   Todo.find({}, function(err, todo) {
     if (err) {
-      throw err;
+      next(err);
     }
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -39,37 +39,47 @@ router.post( '/todos', function ( req, res ) {
   var categoryId = new mongoose.Types.ObjectId(data.categoryId)
 
   todo.save(function(err, todo){
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
     if (err) {
-      res.header('Access-Control-Allow-Origin', '*')
       res.send(err)
     } else {
-      res.header('Access-Control-Allow-Origin', '*')
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-      res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
       res.json({message: "create " + todo.name})
     }
   })
   
 } )
 
-router.patch('/todos/:id', function( req, res ) {
-  Todo.findOne({_id: req.params.id}, function(err, todo){
-    if (err) {
-      res.send(err)
-    }
-    todo.name = req.body.name
-    todo.status = req.body.status
-    todo.elapsed_time = req.body.elapsed_time
-    todo.category_id = req.body.category_id
-    todo.save(function(err) {
-      if (err) {
-        res.send(err)
+router.post('/todos/:id', function( req, res, next ) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  res.header('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS')
+  if (!req.params.id || req.params.id==='undefined') {
+    // throw new Error("params is undefined")
+    res.json(400, {message: 'params is undefined'})
+    return next()
+  }
+  try {
+    Todo.findOne({_id: req.params.id}).exec()
+    .then(function(err, todo){
+      if (err) { return next(err) }
+      if(!todo) {
+        res.json(404, {message: 'todo is not found'})
+        return next()
       }
-
-      res.json({message: "Success updated"})
-      
+      todo.name = req.body.name || todo.name
+      todo.status = req.body.status || todo.status
+      todo.elapsed_time = req.body.elapsed_time || todo.elapsed_time
+      todo.category_id = req.body.category_id || todo.category_id
+      todo.save(function(err) {
+        if (err) { next(err) }
+        res.json({message: "Success updated"})
+      })
     })
-  })
+  } catch(err) {
+    next(err)
+  }
 })
 
 router.delete('/todos/:id', function( req, res ) {
