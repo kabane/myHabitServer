@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
     Todo = require('../models/todo'),
     Category = require('../models/category');
 
-mongoose.connect('mongodb://localhost:27017/myHabit')
+mongoose.connect('mongodb://localhost:27017/myHabit', {useNewUrlParser: true})
 
 Category.deleteMany({})
 .then(
