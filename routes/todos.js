@@ -56,11 +56,10 @@ router.post('/todos/:id', function( req, res, next ) {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   res.header('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS')
   if (!req.params.id || req.params.id==='undefined') {
-    // throw new Error("params is undefined")
     res.json(400, {message: 'params is undefined'})
     return next()
   }
-  Todo.findOne({_id: req.body._id}).exec()
+  Todo.findOne({_id: req.params.id}).exec()
   .then(function(todo){
     if(!todo) {
       res.json(404, {message: 'todo is not found'})
