@@ -45,10 +45,9 @@ router.post( '/todos', function ( req, res ) {
     if (err) {
       res.send(err)
     } else {
-      res.json({message: "create " + todo.name})
+      res.json({message: "create " + todo.name, todo: todo})
     }
   })
-  
 } )
 
 router.post('/todos/:id', function( req, res, next ) {
@@ -65,13 +64,14 @@ router.post('/todos/:id', function( req, res, next ) {
       res.json(404, {message: 'todo is not found'})
       return next()
     }
-    todo.name = req.body.name || todo.name
-    todo.status = req.body.status || todo.status
-    todo.elapsed_time = req.body.elapsed_time || todo.elapsed_time
-    todo.category_id = req.body.category_id || todo.category_id
+    var body = req.body
+    todo.name = body.name || todo.name
+    todo.status = body.status || todo.status
+    todo.elapsed_time = body.elapsed_time || todo.elapsed_time
+    todo.category_id = body.category_id || todo.category_id
     todo.save(function(err) {
       if (err) { next(err) }
-      res.json({message: "Success updated"})
+      res.json({message: "Success updated", todo: todo})
     })
   }).catch(function(err){
     return next(err)
