@@ -41,7 +41,7 @@ router.post( '/', function ( req, res ) {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
-    res.json({message: "create " + category.name})
+    res.json({message: "create " + category.name, category: category})
 
   })
 } )
